@@ -47,7 +47,7 @@ if (!empty($problematicSites)) {
         $mail->Host = 'smtp.gmail.com'; 
         $mail->SMTPAuth = true;
         $mail->Username = 'vit.melnyk51@gmail.com'; 
-        $mail->Password = 'xiie tiuu auin qsao';
+        $mail->Password = 'xiie ti';
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
