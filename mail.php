@@ -1,5 +1,6 @@
 <?php
 require 'vendor/autoload.php';
+require 'config.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -21,9 +22,17 @@ function check401($url) {
     return false;
 }
 
-$sites = file("sites.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES); 
-
-$emailAddress = "vit.melnyk51@gmail.com";
+$folder = 'var/';
+$directories = scandir($folder);
+foreach ($directories as $dir) {
+    if ($dir != '.' && $dir != '..') {
+        if (strpos($dir, '.') !== false) {
+            $url = 'http://' . $dir;
+            $sites[] = $url;
+        }
+    }
+}
+ 
 
 $problematicSites = [];
 
@@ -44,15 +53,16 @@ if (!empty($problematicSites)) {
 
     try {
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com'; 
+        $mail->Host = SMTP_HOST;
         $mail->SMTPAuth = true;
-        $mail->Username = 'vit.melnyk51@gmail.com'; 
-        $mail->Password = 'xiie ti';
-        $mail->SMTPSecure = 'ssl';
-        $mail->Port = 465;
+        $mail->Username = SMTP_USERNAME;
+        $mail->Password = SMTP_PASSWORD;
+        $mail->SMTPSecure = SMTP_SECURE;
+        $mail->Port = SMTP_PORT;
 
-        $mail->setFrom('vit.melnyk51@gmail.com', 'Mailer');
-        $mail->addAddress($emailAddress);
+
+        $mail->setFrom(SMTP_USERNAME, 'Mailer');
+        $mail->addAddress('vit.melnyk51@gmail.com');
 
         $mail->isHTML(false);
         $mail->Subject = 'Sites';
@@ -65,3 +75,4 @@ if (!empty($problematicSites)) {
     }
 }
 ?>
+
